@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Modern UI</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .video-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #1a202c; /* Tailwind's 'gray-900' */
+        }
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        .controls button {
+            background-color: #2d3748; /* Tailwind's 'gray-800' */
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .controls button:hover {
+            background-color: #4a5568; /* Tailwind's 'gray-700' */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-5xl flex flex-col items-center space-y-4">
+        <div class="w-full flex flex-col sm:flex-row  gap-4 justify-center">
+            <!-- Local Video Container -->
+            <div class="video-container w-full md:w-1/2">
+                <video id="localVideo" autoplay playsinline></video>
+                <div class="controls">
+                    <button id="fullscreenLocal">Fullscreen</button>
+                </div>
+                <div id="localStatus" class="absolute top-2 left-2 bg-red-600 text-white py-1 px-2 rounded hidden">Muted</div>
+            </div>
+
+            <!-- Remote Video Container -->
+            <div class="video-container w-full md:w-1/2">
+                <video id="remoteVideo" autoplay playsinline></video>
+                <div class="controls">
+                    <button id="fullscreenRemote">Fullscreen</button>
+                </div>
+                <div id="remoteStatus" class="absolute top-2 left-2 bg-red-600 text-white py-1 px-2 rounded hidden">Muted</div>
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="flex flex-wrap justify-center gap-4 mt-4">
+            <button id="muteButton" class="bg-red-600 hover:bg-red-800 font-bold py-2 px-4 rounded">Mute</button>
+            <button id="unmuteButton" class="bg-green-600 hover:bg-green-800 font-bold py-2 px-4 rounded hidden">Unmute</button>
+            <button id="pauseButton" class="bg-yellow-600 hover:bg-yellow-800 font-bold py-2 px-4 rounded">Pause Video</button>
+            <button id="resumeButton" class="bg-blue-600 hover:bg-blue-800 font-bold py-2 px-4 rounded hidden">Resume Video</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Fullscreen functionality
+        const fullscreenLocal = document.getElementById('fullscreenLocal');
+        const fullscreenRemote = document.getElementById('fullscreenRemote');
+
+        fullscreenLocal.addEventListener('click', () => {
+            const videoElement = document.getElementById('localVideo');
+            if (videoElement.requestFullscreen) {
+                videoElement.requestFullscreen();
+            } else if (videoElement.mozRequestFullScreen) { // Firefox
+                videoElement.mozRequestFullScreen();
+            } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                videoElement.webkitRequestFullscreen();
+            } else if (videoElement.msRequestFullscreen) { // IE/Edge
+                videoElement.msRequestFullscreen();
+            }
+        });
+
+        fullscreenRemote.addEventListener('click', () => {
+            const videoElement = document.getElementById('remoteVideo');
+            if (videoElement.requestFullscreen) {
+                videoElement.requestFullscreen();
+            } else if (videoElement.mozRequestFullScreen) { // Firefox
+                videoElement.mozRequestFullScreen();
+            } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                videoElement.webkitRequestFullscreen();
+            } else if (videoElement.msRequestFullscreen) { // IE/Edge
+                videoElement.msRequestFullscreen();
+            }
+        });
+    </script>
+</body>
+</html>
